@@ -28,18 +28,10 @@ app.once('window-all-closed', () => app.quit());
 //// ここからobs-websocket-jsの接続設定 ////
 const obs = new OBSWebSocket();
 
-ipcMain.on('connectionOnClick', (_event, arg) => {
+ipcMain.on('connectionOnClick', async(_event, arg) => { //レンダラ側で接続ボタンが押された時にobsと接続する
   console.log(arg.port);
   console.log(arg.password);
-  // obs.connect({ //この辺全部途方もなく間違ってるっぽい
-  //   address: 'localhost:'+port,
-  //   password: password
-  // })
-  // .then(() => {
-  //   console.log(`Success! We're connected & authenticated.`);
-  // })
-  // .catch(err => { // Promise convention dicates you have a catch on every chain.
-  //   console.log(err);
-  // });
+  await obs.connect('ws://127.0.0.1:'+arg.port, arg.password);
 })
+
 //// ここまでobs-websocket-jsの接続設定 ////
