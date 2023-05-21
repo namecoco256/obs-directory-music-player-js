@@ -1,0 +1,9 @@
+.serverSettings{
+	text-align: center;
+}
+.inputRow label{
+	display: inline-block;
+	text-align: right;
+	width:10em;
+	margin :10px;
+}

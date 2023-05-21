@@ -1,10 +1,18 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const path = require('path');
 
+const {default: OBSWebSocket} = require('obs-websocket-js');//obs-websocket-jsさん、electronで使うにはこういう書き方しなきゃなんだって。変なの。
+
+//// ここからwindowの設定 ////
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 600,
     height: 400,
     title: 'obs-directory-music-player',
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: false,
+    },
   });
 
   mainWindow.webContents.openDevTools({ mode: 'detach' });//起動時に別窓でデベロッパツールを開く
@@ -16,3 +24,20 @@ app.once('ready', () => {
 });
 
 app.once('window-all-closed', () => app.quit());
+//// ここまでwindowの設定 ////
+
+//// ここからobs-websocket-jsの接続設定 ////
+const obs = new OBSWebSocket();
+ipcMain.on('onClickObsConnect', (_event, port, password) => {
+  obs.connect({
+    address: 'localhost:'+port,
+    password: password
+  })
+  .then(() => {
+    console.log(`Success! We're connected & authenticated.`);
+  })
+  .catch(err => { // Promise convention dicates you have a catch on every chain.
+    console.log(err);
+  });
+})
+//// ここまでobs-websocket-jsの接続設定 ////

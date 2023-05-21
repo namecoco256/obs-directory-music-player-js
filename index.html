@@ -4,12 +4,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>マイアプリ</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>OBS Directory Music Player</title>
 </head>
 
 <body>
-  <h1>Hello, world.</h1>
+  <section class="serverSettings">
+    <h2>サーバー設定</h2>
+    <div class="inputRow">
+      <label for="wsPort">サーバーポート</label>
+      <input type="text" inputmode="numeric" pattern="\d*" id="wsPort">
+    </div>
+    <div class="inputRow">
+      <label for="wsPassword">サーバーパスワード</label>
+      <input type="password" id="wsPassword">
+    </div>
+    <button id="connectionBtn">接続</button>
+  </section>
 
   <script src="app.js"></script>
 </body>
