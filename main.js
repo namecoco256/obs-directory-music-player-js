@@ -29,9 +29,20 @@ app.once('window-all-closed', () => app.quit());
 const obs = new OBSWebSocket();
 
 ipcMain.on('connectionOnClick', async(_event, arg) => { //レンダラ側で接続ボタンが押された時にobsと接続する
-  console.log(arg.port);
-  console.log(arg.password);
+  console.log("connecting to port "+arg.port);
+  console.log("password: "+arg.password);
   await obs.connect('ws://127.0.0.1:'+arg.port, arg.password);
 })
-
 //// ここまでobs-websocket-jsの接続設定 ////
+
+//// ここからフォルダ選択周りの処理 ////
+let selectedDirectory;
+
+ipcMain.handle('selectDirectoryOnClick', async(_event, arg) => { //フォルダ選択ボタンが押された時に呼び出される
+  const result = await dialog.showOpenDialog({
+    properties: ['openDirectory']
+  });
+  console.log(result);
+  selectedDirectory = result;
+  return result;
+})
