@@ -36,13 +36,19 @@ ipcMain.on('connectionOnClick', async(_event, arg) => { //レンダラ側で接�
 //// ここまでobs-websocket-jsの接続設定 ////
 
 //// ここからフォルダ選択周りの処理 ////
-let selectedDirectory;
+let selectedDirectory = {
+  filePaths: "",
+  audioFiles: "",
+};
 
 ipcMain.handle('selectDirectoryOnClick', async(_event, arg) => { //フォルダ選択ボタンが押された時に呼び出される
   const result = await dialog.showOpenDialog({
     properties: ['openDirectory']
   });
   console.log(result);
-  selectedDirectory = result;
-  return result;
+  if (result.canceled) {
+    return selectedDirectory;//キャンセルされたらselectedDirectoryを変更せず前回の結果を返す。
+  };
+  selectedDirectory.filePaths = result.filePaths;
+  return selectedDirectory;
 })
